@@ -43,10 +43,13 @@ func (g *GeminiAdapter) GenerateContent(
 	req *ChatCompletionRequest,
 	messages []*genai.Content,
 ) (*openai.ChatCompletionResponse, error) {
+	// Retrieve the generative model from the client using the specified model identifier
 	model := g.client.GenerativeModel(g.model)
+	// Configure the generative model using the OpenAI request parameters
 	setGenaiModelByOpenaiRequest(model, req)
-
+	// Start a new chat session with the generative model
 	cs := model.StartChat()
+	// Set the chat history for the session using the provided messages
 	setGenaiChatHistory(cs, messages)
 
 	genaiResp, err := cs.SendMessage(ctx, messages[len(messages)-1].Parts...)
